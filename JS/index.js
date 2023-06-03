@@ -43,6 +43,11 @@ const dados = [
   const heigthInput = document.querySelector('#height');
   const calcBtn = document.querySelector('#calc-btn');
   const clearBtn = document.querySelector('#clear-btn');
+  const imcNumber = document.querySelector('#imc-number span');
+  const imcInfor = document.querySelector('#imc-info span');
+  const backBtn = document.querySelector('#back-btn');
+  const calContainer = document.querySelector('#calc-container');
+  const resultContainer = document.querySelector('#result-container');
 
   //Lista de Funções
   //Função para puxar os dados do repositorio
@@ -70,6 +75,12 @@ function creatTable(dados){
     });
 }
 
+//Função para exibir tabela de IMC do usuario
+function showResults(){
+  calContainer.classList.toggle('hide');
+  resultContainer.classList.toggle('hide');
+}
+
 //Função para limpar os dados
 function limparInputs(){
     heigthInput.value = ""
@@ -84,7 +95,48 @@ function calcIMC (peso, altura){
 
     const imc = (peso / (altura*altura)).toFixed(1)
 
-    console.log(imc)
+    let imcInfo
+
+    dados.forEach((i) => {
+      if (imc >= i.min && imc <= i.max){
+        imcInfo = i.info;
+      }
+    });
+
+    if (!imcInfo) return;
+
+    imcNumber.innerText = imc
+    imcInfor.innerText = imcInfo
+
+    switch(imcInfo) {
+      case "Esqueleto":
+        imcNumber.classList.add('tamortoja');
+        imcInfor.classList.add('tamortoja');
+        break;
+    
+      case "Normal":
+        imcNumber.classList.add('bom');
+        imcInfor.classList.add('bom');
+        break;
+    
+      case "Buxin Cerveja":
+        imcNumber.classList.add('marromeno');
+        imcInfor.classList.add('marromeno');
+        break;
+    
+      case "Ronaldo Fenomeno":
+        imcNumber.classList.add('ihrapaz');
+        imcInfor.classList.add('ihrapaz');
+        break;
+    
+      case "Thais Carla":
+        imcNumber.classList.add('tamortoja');
+        imcInfor.classList.add('tamortoja');
+        break;
+    }
+
+    showResults()
+ 
 }
 
 
@@ -108,9 +160,14 @@ calcBtn.addEventListener('click', (e) => {
 })
 
 
-
 //Evento responsavel por limpar os dados do input
   clearBtn.addEventListener('click', (e) => {
-    e.preventDefault();//Pra que não seja enviado formulario
+    e.preventDefault();
     limparInputs();
+  })
+
+//Evento para o botao voltar, onde limpa os campos do formulario e volta para o inicio
+  backBtn.addEventListener('click', () => {
+    limparInputs();
+    showResults();
   })
